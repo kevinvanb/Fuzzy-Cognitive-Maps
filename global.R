@@ -27,11 +27,6 @@ require(plyr)
 require(XML)
 #require(reshape2)
 
-# devtools::install_github(c('rstudio/ggvis', 'rstudio/shiny'))
-g_squash <- c('binary', 'tanh', 'sigmoid', 'all')
-g_sep <- c('<M>', '<IO>', '<SS>', '<SF>')
-g_ftypes <- list(MentalModeler = 'mmp', csv = 'csv')
-g_flocations <- list(Local='local', 'Google Spreadsheet'='google', Dropbox = 'dropbox')
 g_m <- list(m=data.frame(), n=data.frame())  # dataframe containing uploaded adjacency matrix 
 g_ss <- list(m=data.frame(), n=data.frame()) # dataframe containing uploaded start states
 g_sf <- list(m=data.frame(), n=data.frame()) # dataframe containing uploaded squashing functions
@@ -41,3 +36,22 @@ g_r <- reactiveValues(q=data.frame(),        # queue of scenarios
                       r=list(),              # list containing fcm results for each iteration
                       s=data.frame())        # dataframe containing summary of fcm results
 g_error <- ''                                # Error message generated when uploading data
+
+initialize <- function(){
+  g_m <<- list(m=data.frame(), n=data.frame())  # dataframe containing uploaded adjacency matrix 
+  g_ss <<- list(m=data.frame(), n=data.frame()) # dataframe containing uploaded start states
+  g_sf <<- list(m=data.frame(), n=data.frame()) # dataframe containing uploaded squashing functions
+  g_io <<- list(m=data.frame(), n=data.frame()) # dataframe containing uploaded inputs/outputs
+  g_t$q <<- data.frame()                        # temp queue
+  g_r$q <<- data.frame()                        # queue of scenarios
+  g_r$r <<- list()                              # list containing fcm results for each iteration
+  g_r$s <<- data.frame()                        # dataframe containing summary of fcm results
+  g_error <<- ''                                # Error message generated when uploading data
+}
+
+# devtools::install_github(c('rstudio/ggvis', 'rstudio/shiny'))
+g_squash <- c('binary', 'tanh', 'sigmoid', 'all')
+g_sep <- c('<M>', '<IO>', '<SS>', '<SF>')
+g_ftypes <- list(MentalModeler = 'mmp', csv = 'csv')
+g_flocations <- list(Local='local', 'Google Spreadsheet'='google', Dropbox = 'dropbox')
+initialize()

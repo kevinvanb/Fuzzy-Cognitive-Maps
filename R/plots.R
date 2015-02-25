@@ -82,12 +82,12 @@ plot.iteration <- function() {
     return(NULL)
   }
   
-  
+  isolate({
   if (input$s_ftype == "mmp")
     concept_names <- as.vector(apply(g_m$n, 1, function(x) paste(x[c(2,3)], collapse="-")))
   else 
     concept_names <- as.vector(apply(g_m$n, 1, function(x) paste(x, collapse="-")))
-
+})
   concepts <- rownames(g_m$n)[concept_names %in% input$s_iterplot]
   r <- melt(result_scen[,concepts])
   if (length(concepts) == 1)

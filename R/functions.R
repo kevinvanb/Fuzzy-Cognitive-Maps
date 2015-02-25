@@ -80,6 +80,7 @@ data.retrieve <- function(file_path, file_loc, c_header = TRUE, r_header = FALSE
     g_error <<- "Data cannot be found at specified location or chosen parameters not correct"
     return(data.frame()) 
   }
+  
   if (ncol(df) > 1 && r_header)
     if (anyDuplicated(df[,1]) == 0){
       rownames(df) <- df[,1]
@@ -169,8 +170,8 @@ data.split <- function(d){
       mat$m <- m[, col_match]
       mat$m <- apply(mat$m, 2, as.numeric)
       mat$n <- m[, -col_match]
-      mat$n <- apply(mat$n, 2, function(x) { x[is.na(x)] = "" 
-                                             x})
+#       mat$n <- apply(mat$n, 2, function(x) { x[is.na(x)] = "" 
+#                                              x})
       
       if (ncol(mat$m) != nrow(mat$m)) {
         g_error <<- "Number of columns must be equal to the number of rows in matrix, and row and
@@ -179,13 +180,14 @@ data.split <- function(d){
       }
       dimnames(mat$m) <- list(m[, 1], m[, 1])
       dimnames(mat$n) <- list(m[, 1], c("NAME", "DESCRIPTION"))
+
         # Read input/output data
         if (length(io_dv) == 2) {
           if (io_dv[2] - io_dv[1] > 1) {
             io$m <- d[(io_dv[1] + 1):(io_dv[2] - 1), col_match]
             io$n <- d[(io_dv[1] + 1):(io_dv[2] - 1), -col_match]
-            io$n <- apply(io$n, 2, function(x) { x[is.na(x)] = "" 
-                                                   x})
+#             io$n <- apply(io$n, 2, function(x) { x[is.na(x)] = "" 
+#                                                    x})
             dimnames(io$m) <- list(io$n[, 1], colnames(mat$m))
             dimnames(io$n) <- list(io$n[, 1], c("NAME", "DESCRIPTION"))
           }
@@ -193,16 +195,16 @@ data.split <- function(d){
 #         else
 #           if (length(io_dv) != 0)
 #             g_error <<- paste0("Ensure ",  g_sep[2], " is included before and after the io data in the csv file")
-#         
+#        
         # Read start state data
         if (length(ss_dv) == 2) {
           if (ss_dv[2] - ss_dv[1] > 1) {
             ss$m <- d[(ss_dv[1] + 1):(ss_dv[2] - 1), col_match]
             ss$n <- d[(ss_dv[1] + 1):(ss_dv[2] - 1), -col_match]
-            ss$n <- apply(ss$n, 2, function(x) { x[is.na(x)] = "" 
-                                                 x})
-            dimnames(ss$m) <- list(ss$n[, 1], colnames(mat$m))
-            dimnames(ss$n) <- list(ss$n[, 1], c("NAME", "DESCRIPTION"))
+#             ss$n <- data.frame(apply(ss$n, 1, function(x) { x[is.na(x)] = "" 
+#                                                  x}))
+            dimnames(ss$m) <- list(ss$n[, 1] , colnames(mat$m))
+            dimnames(ss$n) <- list(ss$n[, 1] , c("NAME", "DESCRIPTION"))
           }
         }
 #         else
@@ -214,8 +216,9 @@ data.split <- function(d){
           if (sf_dv[2] - sf_dv[1] > 1) {
             sf$m <- d[(sf_dv[1] + 1):(sf_dv[2] - 1), col_match]
             sf$n <- d[(sf_dv[1] + 1):(sf_dv[2] - 1), -col_match]
-            sf$n <- apply(sf$n, 2, function(x) { x[is.na(x)] = "" 
-                                                 x})
+#             sf$n <- data.frame(apply(sf$n, 1, function(x) { x[is.na(x)] = "" 
+#                                                  x}))
+            
             dimnames(sf$m) <- list(sf$n[, 1], colnames(mat$m))
             dimnames(sf$n) <- list(sf$n[, 1], c("NAME", "DESCRIPTION"))
           }
@@ -223,7 +226,7 @@ data.split <- function(d){
 #         else
 #           if (length(sf_dv) != 0)
 #             g_error <<- paste0("Ensure ",  g_sep[4], " is included before and after the squashing function data in the csv file")
-#         
+#        
       res <- list(mat = mat, io = io, ss = ss, sf = sf)  
       return(res)
       # Save data to global files to be used in other functions

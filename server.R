@@ -20,6 +20,7 @@ shinyServer(function(input, output, session) {
     if (input$btn_upload != 0){
       # Load data into global dataset dataframe
       isolate({
+        initialize()
         mm_values <- c(input$n_hpos, input$n_mpos, input$n_lpos, input$n_hneg,
                        input$n_mneg, input$n_lneg)
         res <- data.load(input$s_flocation, input$s_ftype, input$data_file, input$gs_url, 
@@ -28,7 +29,6 @@ shinyServer(function(input, output, session) {
         g_io <<- res$io
         g_ss <<- res$ss
         g_sf <<- res$sf
-      })
       # If a error occurred during uploading the file, display the error
       if (g_error != '')
         session$sendCustomMessage(type = "show_error", g_error)
@@ -56,6 +56,7 @@ shinyServer(function(input, output, session) {
       # updateSelectInput(session, 's_sconcepts', 'Start Concepts (Selected = 1):', sfixed_n)
       updateSelectInput(session, 's_iterplot', 'Select Concepts to Plot:', sfixed_n, sfixed_n)
       updateSelectInput(session, 's_squash', 'Squashing Function:', ssquash_n, ssquash_n[1])
+      })
     }
   }) # observe upload
   
