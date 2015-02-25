@@ -133,7 +133,7 @@ plot.scenario <- function(r_scenarios, scenplot) {
        group_by(Scenario) %>% layer_paths(stroke = ~Scenario) %>% layer_points(fill = ~Scenario) %>%
        add_axis("x", title = "Concept", title_offset = 50) %>% 
        add_axis("y", title = "Value", title_offset = 50) %>%
-       add_tooltip(function(df) paste("Concept:", df$Concept, "Value:", df$Value, "Scenario:", df$Scenario)) %>% 
+       add_tooltip(function(df) paste("Concept:", df$Concept, "Value:", round(df$Value, 2), "Scenario:", df$Scenario)) %>% 
        add_axis("x", orient = "top", ticks = 0, title = "Scenarios",
                 properties = axis_props(axis = list(stroke = "white"), labels = list(fontSize = 0), title = list(fontSize = 20)))
   

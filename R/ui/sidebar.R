@@ -54,10 +54,14 @@ dashboardSidebar(
               
               tabPanel("2.FCM",value="fcms_tab",
                        selectInput('s_state', 'Start State:', 'None', multiple = FALSE),
-                       conditionalPanel(
-                         condition = "input.s_state == 'Permutations'",
-                         selectInput('s_inconcepts', 'Input Concepts:', 'None', multiple = TRUE)
-                       ),
+#                        conditionalPanel(
+#                          condition = "input.s_state == 'Permutations'",
+#                          selectInput('s_inconcepts', 'Input Concepts:', 'None', multiple = TRUE)
+#                        ),
+#                        conditionalPanel(
+#                          condition = "input.s_state == 'Specify'",
+#                          selectInput('s_sconcepts', 'Start Concepts (Selected = 1):', 'None', multiple = TRUE)
+#                        ),
                        selectInput('s_fixed', 'Clamp Concept (Selected = Fixed):', 'None', multiple = TRUE),
                        #                         HTML("</br><i><b>Note 1:</b> To select multiple concepts, hold down </br>the Ctrl key 
                        #                               and left click the required concepts.</i></br>
@@ -70,23 +74,26 @@ dashboardSidebar(
                        fluidRow(
                          column(4, actionButton("btn_queue","Queue")),
                          column(4, uiOutput("analysis"))
-                       )
+                       ),
+                       br(),
+                       br(),
+                       uiOutput("model_down")
               ),
               tabPanel("Settings",value="settings_tab",
                        br(),
                        HTML("<b><u>MentalModeler Settings</u></b>"),
                        br(),
                        fluidRow(
-                         column(6, numericInput("n_hpos","H+ =", 1, 0, 1, 0.01)),
-                         column(6, numericInput("n_hneg","H- =", -1, 0, -1, 0.01))
+                         column(6, numericInput("n_hpos","+++ =", 1, 0, 1, 0.01)),
+                         column(6, numericInput("n_hneg","--- =", -1, 0, -1, 0.01))
                        ),
                        fluidRow(
-                         column(6, numericInput("n_mpos","M+ =", 0.66, 0, 1, 0.01)),
-                         column(6, numericInput("n_mneg","M- =", -0.66, 0, -1, 0.01))
+                         column(6, numericInput("n_mpos","++ =", 0.66, 0, 1, 0.01)),
+                         column(6, numericInput("n_mneg","-- =", -0.66, 0, -1, 0.01))
                        ),
                        fluidRow(
-                         column(6, numericInput("n_lpos","L+ =", 0.33, 0, 1, 0.01)),
-                         column(6, numericInput("n_lneg","L- =", -0.33, 0, -1, 0.01))
+                         column(6, numericInput("n_lpos","+ =", 0.33, 0, 1, 0.01)),
+                         column(6, numericInput("n_lneg","- =", -0.33, 0, -1, 0.01))
                        ),
                        br(),
                        HTML("<b><u>FCM Plot Settings</u></b>"),

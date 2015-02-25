@@ -15,6 +15,47 @@ output$q_remove <- renderUI({
 })
 
 #-------------------------------------------------------------------------------
+# Create download button for model
+#-------------------------------------------------------------------------------
+output$model_down <- renderUI({
+  if (nrow(g_m$m) == 0)
+    return(NULL)
+  
+  downloadButton('btn_mdown', 'Download Model')
+})
+
+#-------------------------------------------------------------------------------
+# Saves model to csv file when button pressed
+#-------------------------------------------------------------------------------
+output$btn_mdown <- downloadHandler(
+  filename = function() {
+    paste0('fcm_model_', Sys.Date(), '.csv')
+  },
+  content = function(file) {
+    
+    m_n <- g_m$n
+    if (ncol(g_m$n) > 2)
+      m_n <- g_m$n[,2:3]
+    
+    print(g_m$n)
+    
+    mat <- cbind(m_n, g_m$m)
+    s_state <- cbind(g_ss$n, g_ss$m)
+    s_func <- cbind(g_sf$n, g_sf$m)
+    row_mat <- c(g_sep[1], rep("", (ncol(g_m$m) + ncol(m_n) - 1)))
+    print(row_mat)
+    row_ss <- c(g_sep[3], rep("", (ncol(g_m$m) + ncol(m_n) - 1)))
+    row_sf <- c(g_sep[4], rep("", (ncol(g_m$m) + ncol(m_n) - 1)))
+    model <- rbind(row_mat, mat, row_mat, row_ss, s_state, row_ss, 
+                   row_sf, s_func, row_sf)
+     
+                 
+    write.csv(model, file, row.names = FALSE)
+  },
+  contentType = "text/csv"
+) 
+
+#-------------------------------------------------------------------------------
 # Create download button for scenario results
 #-------------------------------------------------------------------------------
 output$s_down <- renderUI({

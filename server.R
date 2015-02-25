@@ -53,6 +53,7 @@ shinyServer(function(input, output, session) {
       updateSelectInput(session, 's_state', 'Start State:', c(sstate_n, sstate_n[1]))
       updateSelectInput(session, 's_fixed', 'Clamp Concept (Selected = Fixed):', sfixed_n)
       # updateSelectInput(session, 's_inconcepts', 'Input concepts:', sfixed_n)
+      # updateSelectInput(session, 's_sconcepts', 'Start Concepts (Selected = 1):', sfixed_n)
       updateSelectInput(session, 's_iterplot', 'Select Concepts to Plot:', sfixed_n, sfixed_n)
       updateSelectInput(session, 's_squash', 'Squashing Function:', ssquash_n, ssquash_n[1])
     }
@@ -87,6 +88,7 @@ shinyServer(function(input, output, session) {
         else 
           s_f <- as.vector(apply(g_m$n, 1, function(x) paste(x, collapse="-")))
         
+        
         switch(s_state,
                "All Above" = {
                  s_state <- rownames(g_ss$n)
@@ -109,9 +111,8 @@ shinyServer(function(input, output, session) {
                  s_names <- nrow(g_t$q) + 1
                })
         
-        
         if (s_squash == "all") {
-          if (s_state == "All Above") {
+          if (length(s_state) > 1) {
               s_squash <- sort(rep(g_squash[-length(g_squash)], nrow(g_ss$n)))
               s_names <- seq(nrow(g_t$q) + 1, nrow(g_t$q) + length(s_squash))
           }
@@ -155,7 +156,6 @@ shinyServer(function(input, output, session) {
           updateNumericInput(session, "n_fcmheight", "Height:", 800, 100, 1600, 1)
           updateSelectInput(session, 's_scenario', 'Scenario:', rownames(g_r$q), rownames(g_r$q)[1])
           updateSelectInput(session, 's_scenplot', 'Select Scenarios to Plot:', rownames(g_r$q), rownames(g_r$q))
-            
           # If permutation is part of the queue, run per.analysis() function
           if ("PER" %in% g_r$q[, 2]) {
             #             g_r$r <<- perm.analysis()

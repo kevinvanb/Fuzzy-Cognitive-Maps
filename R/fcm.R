@@ -33,7 +33,7 @@
 FCM <- function(mat, s.state, squash = "binary", fixed = 0, iter = 100, eps = 0) {
   # Currently these are the only squashing functions allowed, can easily be updated
   squash.l <- g_squash[-length(g_squash)]
-  
+
   # ------- Start of parameters checks ------- #
   # Check adjacency matrix
   # Convert mat into matrix
@@ -43,17 +43,19 @@ FCM <- function(mat, s.state, squash = "binary", fixed = 0, iter = 100, eps = 0)
 
   if (nrow(mat) != ncol(mat))
     stop("Adjacency matrix must have same number of rows and columns", call. = FALSE)
-  
+
   # Check start state
   if (!is.numeric(s.state))
     stop("Start state vector must be numeric", call. = FALSE)
   # If only one start state value is specified, repeat that value for all concepts
+
   if (length(s.state) == 1)
     s.state <- rep(s.state, nrow(mat))
+
   if (length(s.state) != nrow(mat))
     stop("Start state must be the same length as the number of concepts", call. = FALSE)
   s.state <- matrix(s.state, nrow=1)
-  
+
   # Check squashing function(s)
   squash <- as.character(squash)
   if (sum(tolower(squash) %in% squash.l) != length(squash))
@@ -61,7 +63,7 @@ FCM <- function(mat, s.state, squash = "binary", fixed = 0, iter = 100, eps = 0)
   if (length(squash) != nrow(mat) && length(squash) != 1)
     stop("Squashing function must be the same length as the number of concepts
          or of length one when using one squashing function", call. = FALSE)
-  
+
   # Check fixed
   if (!is.numeric(fixed))
     stop("Fixed vector must be numeric", call. = FALSE)
