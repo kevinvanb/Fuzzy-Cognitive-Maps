@@ -1,5 +1,6 @@
 # ------------------- LOAD LIBRARIES ------------------------#
-packages <- c("qgraph", "shiny", "ggplot2", "plyr", "RCurl", "XML", "reshape", "devtools", "ggvis")
+packages <- c("qgraph", "shiny", "ggplot2", "plyr", "RCurl", 
+              "XML", "reshape", "devtools", "ggvis")
 if (length(setdiff(packages, installed.packages())) > 0)
   install.packages(setdiff(packages, installed.packages()))
 
@@ -10,22 +11,35 @@ if (length(setdiff("shinydashboard", installed.packages())) > 0)
 library(devtools)
 # shinydashboard package required for the layout
 library(shinydashboard)
-# require(Matrix)
+# Required for plotting the network 
 require(qgraph)
+# Required for creating the web page
 require(shiny)
-# require(rCharts)
-# require(XLConnect)
-# require(gdata)
-require(RCurl)                # Required for obtaining data from Google spreadsheets 
-# require(repmis)             # Required for obtaining data from Dropbox
+# Required for obtaining data from Google spreadsheets 
+require(RCurl)
 require(reshape)
-require(ggplot2)
-#require(rCharts)
-#require(sfsmisc)
+# require(ggplot2)
+# Required for line plots
 require(ggvis)
+# Required for manipulating the data
 require(plyr)
+# Required for reading the Mentalmodeler file
 require(XML)
-#require(reshape2)
+
+# ------------------- SETUp GLOBAL VALUES ------------------------#
+# Default squashing function list
+g_squash <- c("binary", "tanh", "sigmoid", "All Above")
+# Squashing functions as equations
+g_squash_f <- c(binary = "ifelse(x < 0.5, 0, 1)", tanh = "tanh(x)", sigmoid = "1/(1 + exp(-x))")
+g_sep <- c('<M>', '<IO>', '<SS>', '<SF>')
+g_ftypes <- list(MentalModeler = 'mmp', csv = 'csv')
+g_flocations <- list(Local='local', 'Google Spreadsheet'='google', Dropbox = 'dropbox')            
+
+
+# g_data <- list()
+# g_reactive <- reactiveValues(temp_queue = data.frame(), queue = data.frame(),
+#                              res_iter = list(), res_summary = data.frame())
+
 
 g_m <- list(m=data.frame(), n=data.frame())  # dataframe containing uploaded adjacency matrix 
 g_ss <- list(m=data.frame(), n=data.frame()) # dataframe containing uploaded start states
@@ -38,6 +52,15 @@ g_r <- reactiveValues(q=data.frame(),        # queue of scenarios
 g_error <- ''                                # Error message generated when uploading data
 
 initialize <- function(){
+#   g_data <- list(amat_data = data.frame(), amat_names = data.frame(),
+#                  sstate_data = data.frame(), sstate_names = data.frame(),
+#                  squash_data = data.frame(), squash_names = data.frame(), 
+#                  inout_data = data.frame(), inout_names = data.frame())
+#   g_reactive$temp_queue <- data.frame()
+#   g_reactive$queue <- data.frame() 
+#   g_reactive$res_iter <- data.frame()
+#   g_reactive$res_summary <- data.frame()
+  
   g_m <<- list(m=data.frame(), n=data.frame())  # dataframe containing uploaded adjacency matrix 
   g_ss <<- list(m=data.frame(), n=data.frame()) # dataframe containing uploaded start states
   g_sf <<- list(m=data.frame(), n=data.frame()) # dataframe containing uploaded squashing functions
@@ -49,9 +72,4 @@ initialize <- function(){
   g_error <<- ''                                # Error message generated when uploading data
 }
 
-# devtools::install_github(c('rstudio/ggvis', 'rstudio/shiny'))
-g_squash <- c('binary', 'tanh', 'sigmoid', 'all')
-g_sep <- c('<M>', '<IO>', '<SS>', '<SF>')
-g_ftypes <- list(MentalModeler = 'mmp', csv = 'csv')
-g_flocations <- list(Local='local', 'Google Spreadsheet'='google', Dropbox = 'dropbox')
 initialize()

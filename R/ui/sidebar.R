@@ -99,8 +99,8 @@ dashboardSidebar(
                        HTML("<b><u>FCM Plot Settings</u></b>"),
                        br(),
                        fluidRow(
-                         column(6, numericInput("n_fcmwidth","Width:", 0, 0, 1600, 1)), 
-                         column(6, numericInput("n_fcmheight","Height:", 0, 0, 1600, 1))
+                         column(6, numericInput("n_fcmwidth","Width:", 800, 0, 1600, 1)), 
+                         column(6, numericInput("n_fcmheight","Height:", 800, 0, 1600, 1))
                        ),
                        numericInput("n_fcmdelay","Animation Delay (ms):", 1000, 10, 10000, 1)
               ),

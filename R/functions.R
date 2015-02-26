@@ -259,10 +259,16 @@ data.analysis <- function() {
                 as.numeric(g_ss$m[rownames(g_ss$m) == q$s_state,]))
     # Get the concepts that will be fixed for the ith entry in the queue
     fc <- as.numeric(colnames(g_m$m) %in% unlist(strsplit(as.character(q$fixed), split=",")))
-    sf <- q$squash
+    sf <- as.character(q$squash)
+    
     if (!(sf %in% g_squash)) {
       sf <- g_sf$m[rownames(g_sf$m) == sf,]
+      sf <- sapply(sf, function(x) if (x %in% names(g_squash_f)) g_squash_f[x]
+                                   else x) 
     }
+    else
+      sf <- g_squash_f[sf]
+    
     # Calculate fcm results for ith entry in the queue
     r <- FCM(g_m$m, ss, sf, fc, q$iter, q$eps)
     # Save the results to a results list using a unique scenario name to identify

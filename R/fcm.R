@@ -8,7 +8,7 @@
 #             size = number of concepts x number of concepts
 # s.state   : start state
 #             size = 1 x number of concepts
-# squash    : squashing function (binary, tanh, sigmoid)
+# squash    : squashing function as string
 #             size = 1 (for same squashing function for all concepts) OR
 #             size = 1 x number of concepts (for different squashing functions for each concept)
 #             default = binary
@@ -30,9 +30,9 @@
 # Size is specified as number of rows x number of columns
 #-----------------------------------------------------------------------------------#
 
-FCM <- function(mat, s.state, squash = "binary", fixed = 0, iter = 100, eps = 0) {
+FCM <- function(mat, s.state, squash = "ifelse(x < 0.5, 0, 1)", fixed = 0, iter = 100, eps = 0) {
   # Currently these are the only squashing functions allowed, can easily be updated
-  squash.l <- g_squash[-length(g_squash)]
+  # squash.l <- g_squash[-length(g_squash)]
 
   # ------- Start of parameters checks ------- #
   # Check adjacency matrix
@@ -58,8 +58,8 @@ FCM <- function(mat, s.state, squash = "binary", fixed = 0, iter = 100, eps = 0)
 
   # Check squashing function(s)
   squash <- as.character(squash)
-  if (sum(tolower(squash) %in% squash.l) != length(squash))
-    stop(paste("Squashing function(s) not", paste(squash.l, collapse=" OR ")), call. = FALSE)
+#   if (sum(tolower(squash) %in% squash.l) != length(squash))
+#     stop(paste("Squashing function(s) not", paste(squash.l, collapse=" OR ")), call. = FALSE)
   if (length(squash) != nrow(mat) && length(squash) != 1)
     stop("Squashing function must be the same length as the number of concepts
          or of length one when using one squashing function", call. = FALSE)
@@ -129,21 +129,22 @@ FCM <- function(mat, s.state, squash = "binary", fixed = 0, iter = 100, eps = 0)
 # Squash function
 # 
 # Parameters
-# value     : value(s) to be squashed
+# x         : value(s) to be squashed
 #             size = 1 x any length
-# s.state   : start state
+# squash.f  : squashing function as string
 #             size = 1 x number of concepts 
 #
 # Return
 # result    : squash values
 #             size = 1 x length of value
 #-----------------------------------------------------------------------------------#
-.squash <- function(value, squash.f) {
-  result <- switch(as.character(squash.f),
-                'binary' = ifelse(value < 0.5, 0, 1),
-                'tanh' = tanh(value),
-                'sigmoid' = 1/(1 + exp(-value)))
-  
+.squash <- function(x, squash.f) {
+  # Convert squashing function as string to expression
+  result <- eval(parse(text = squash.f), envir = NULL)
+#   result <- switch(as.character(squash.f),
+#                 'binary' = ifelse(x < 0.5, 0, 1),
+#                 'tanh' = tanh(x),
+#                 'sigmoid' = 1/(1 + exp(-x)))
   return(result)
 }
   

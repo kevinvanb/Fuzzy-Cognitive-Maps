@@ -54,7 +54,7 @@ shinyServer(function(input, output, session) {
       updateSelectInput(session, 's_fixed', 'Clamp Concept (Selected = Fixed):', sfixed_n)
       # updateSelectInput(session, 's_inconcepts', 'Input concepts:', sfixed_n)
       # updateSelectInput(session, 's_sconcepts', 'Start Concepts (Selected = 1):', sfixed_n)
-      updateSelectInput(session, 's_iterplot', 'Select Concepts to Plot:', sfixed_n, sfixed_n)
+      updateSelectInput(session, 's_iterplot', 'Select Concepts to Plot:', sfixed_n, sfixed_n[1])
       updateSelectInput(session, 's_squash', 'Squashing Function:', ssquash_n, ssquash_n[1])
       })
     }
@@ -112,7 +112,7 @@ shinyServer(function(input, output, session) {
                  s_names <- nrow(g_t$q) + 1
                })
         
-        if (s_squash == "all") {
+        if (s_squash == "All Above") {
           if (length(s_state) > 1) {
               s_squash <- sort(rep(g_squash[-length(g_squash)], nrow(g_ss$n)))
               s_names <- seq(nrow(g_t$q) + 1, nrow(g_t$q) + length(s_squash))
@@ -140,7 +140,6 @@ shinyServer(function(input, output, session) {
     }
   }) # observe btn_queue
   
-  
   #-------------------------------------------------------------------------------
   # When analysis button is clicked fcm result in calculated
   #-------------------------------------------------------------------------------
@@ -152,21 +151,19 @@ shinyServer(function(input, output, session) {
           # analysis button was pressed. It is possible for the user to remove a scenario from the
           # queue after the analysism which will be lost if not saved.
           g_r$q <<- g_t$q
-          # Update all numeric and select inputs
-          updateNumericInput(session, "n_fcmwidth", "Width:", 800, 100, 1600, 1)
-          updateNumericInput(session, "n_fcmheight", "Height:", 800, 100, 1600, 1)
+          # Update select inputs to include list of scenarios
           updateSelectInput(session, 's_scenario', 'Scenario:', rownames(g_r$q), rownames(g_r$q)[1])
           updateSelectInput(session, 's_scenplot', 'Select Scenarios to Plot:', rownames(g_r$q), rownames(g_r$q))
           # If permutation is part of the queue, run per.analysis() function
-          if ("PER" %in% g_r$q[, 2]) {
-            #             g_r$r <<- perm.analysis()
-            g_r$s <<- perm.analysis()
-          }
-          # else run the normal analysis
-          else {
+#           if ("PER" %in% g_r$q[, 2]) {
+#             #             g_r$r <<- perm.analysis()
+#             g_r$s <<- perm.analysis()
+#           }
+#           # else run the normal analysis
+#           else {
             g_r$r <<- data.analysis()
             g_r$s <<- r.summary()
-          }
+#           }
         })
         # If a error occurred during uploading the file, display the error
         if (g_error != '')

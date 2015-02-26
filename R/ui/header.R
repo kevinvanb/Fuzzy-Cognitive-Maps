@@ -1,2 +1,1 @@
 dashboardHeader(title = "Fuzzy Cognitive Maps")
-#

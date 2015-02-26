@@ -69,6 +69,9 @@ dashboardBody(
                                               ))
                                    )
                        )
+              ),
+              tabPanel("Network Stats", value="rnetworkstats_tab",
+                       HTML("COMING SOON")
               )
   ) #tabset panel
 ) # main panel
