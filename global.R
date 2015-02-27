@@ -5,26 +5,26 @@ if (length(setdiff(packages, installed.packages())) > 0)
   install.packages(setdiff(packages, installed.packages()))
 
 if (length(setdiff("shinydashboard", installed.packages())) > 0)
-  devtools::install_github("rstudio/shinydashboard")
+   devtools::install_github("rstudio/shinydashboard")
 
 # devtools required for shinydashboard
 library(devtools)
+# Required for creating the web page
+library(shiny)
 # shinydashboard package required for the layout
 library(shinydashboard)
 # Required for plotting the network 
-require(qgraph)
-# Required for creating the web page
-require(shiny)
+library(qgraph)
 # Required for obtaining data from Google spreadsheets 
-require(RCurl)
-require(reshape)
+library(RCurl)
+library(reshape2)
 # require(ggplot2)
 # Required for line plots
-require(ggvis)
+library(ggvis)
 # Required for manipulating the data
-require(plyr)
+library(plyr)
 # Required for reading the Mentalmodeler file
-require(XML)
+library(XML)
 
 # ------------------- SETUp GLOBAL VALUES ------------------------#
 # Default squashing function list

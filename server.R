@@ -7,7 +7,7 @@
 #-----------------------------------------------------------------------------
 
 shinyServer(function(input, output, session) {
-  source("R/FCM.R", local=TRUE)$value
+  source("R/fcm.R", local=TRUE)$value
   source("R/plots.R", local=TRUE)$value
   source("R/tables.R", local=TRUE)$value
   source("R/io.R", local=TRUE)$value
