@@ -1,5 +1,5 @@
 # ------------------- LOAD LIBRARIES ------------------------#
-packages <- c("qgraph", "shiny", "ggplot2", "plyr", "RCurl", 
+packages <- c("Rcpp", "qgraph", "shiny", "ggplot2", "plyr", "RCurl", 
               "XML", "reshape", "devtools", "ggvis")
 if (length(setdiff(packages, installed.packages())) > 0)
   install.packages(setdiff(packages, installed.packages()))

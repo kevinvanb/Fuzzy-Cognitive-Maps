@@ -46,7 +46,7 @@ shinyServer(function(input, output, session) {
       else
         sstate_n <- c(as.vector(apply(g_ss$n, 1, function(x) paste(x, collapse="-"))), "All Above", "Permutations")
       if (input$s_ftype == "mmp")
-        sfixed_n <- as.vector(apply(g_m$n, 1, function(x) paste(x[c(2,3)], collapse="-")))
+        sfixed_n <- as.vector(apply(g_m$n, 1, function(x) paste(x[c(1,2)], collapse="-")))
       else
         sfixed_n <- as.vector(apply(g_m$n, 1, function(x) paste(x, collapse="-")))
       ssquash_n <- c(g_squash, as.vector(apply(g_sf$n, 1, function(x) paste(x, collapse="-"))))
@@ -85,7 +85,7 @@ shinyServer(function(input, output, session) {
         s_s <- as.vector(apply(g_ss$n, 1, function(x) paste(x, collapse="-")))
         
         if (input$s_ftype == "mmp")
-          s_f <- as.vector(apply(g_m$n, 1, function(x) paste(x[c(2,3)], collapse="-")))
+          s_f <- as.vector(apply(g_m$n, 1, function(x) paste(x[c(1,2)], collapse="-")))
         else 
           s_f <- as.vector(apply(g_m$n, 1, function(x) paste(x, collapse="-")))
         

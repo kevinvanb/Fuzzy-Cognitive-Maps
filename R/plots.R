@@ -84,7 +84,7 @@ plot.iteration <- function() {
   
   isolate({
   if (input$s_ftype == "mmp")
-    concept_names <- as.vector(apply(g_m$n, 1, function(x) paste(x[c(2,3)], collapse="-")))
+    concept_names <- as.vector(apply(g_m$n, 1, function(x) paste(x[c(1,2)], collapse="-")))
   else 
     concept_names <- as.vector(apply(g_m$n, 1, function(x) paste(x, collapse="-")))
 })
@@ -103,7 +103,8 @@ plot.iteration <- function() {
     add_axis("y", title = "Value", title_offset = 50) %>% 
     add_tooltip(function(df) paste("Iteration:", df$Iteration, "Value:", round(df$Value, 2), "Concept:", df$Concept)) %>% 
   add_axis("x", orient = "top", ticks = 0, title = "Concept Iterations",
-           properties = axis_props(axis = list(stroke = "white"), labels = list(fontSize = 0), title = list(fontSize = 20)))
+           properties = axis_props(axis = list(stroke = "white"), labels = list(fontSize = 0), title = list(fontSize = 20))) %>%
+  set_options(width = 1000, height = 400)
   # p <- p %>% layer_text(x = ~Concept, y = ~Value, text := ~Scenario)
   
   p %>% bind_shiny("iter_plot")
@@ -135,7 +136,8 @@ plot.scenario <- function(r_scenarios, scenplot) {
        add_axis("y", title = "Value", title_offset = 50) %>%
        add_tooltip(function(df) paste("Concept:", df$Concept, "Value:", round(df$Value, 2), "Scenario:", df$Scenario)) %>% 
        add_axis("x", orient = "top", ticks = 0, title = "Scenarios",
-                properties = axis_props(axis = list(stroke = "white"), labels = list(fontSize = 0), title = list(fontSize = 20)))
+                properties = axis_props(axis = list(stroke = "white"), labels = list(fontSize = 0), title = list(fontSize = 20))) %>%
+       set_options(width = 1000, height = 400)
   
   p %>% bind_shiny("scen_plot")
 }

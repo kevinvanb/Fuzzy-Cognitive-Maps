@@ -112,7 +112,7 @@ read.mmf <- function(file_path, file_loc, mm_values) {
   # Extract Information about concepts
   concept_headers <- c("id", "name", "notes", "units", "x", "y")
   concept_info <- ldply(xml_data$concepts, function(concept) unlist(concept[concept_headers]))[, -1]
-  rownames(concept_info) <- concept_info$name
+  rownames(concept_info) <- paste0("C",seq(1:nrow(concept_info)))
   
   # Extract relationships for each concept and add concept id and name to
   # show the source of the relationship
@@ -122,7 +122,7 @@ read.mmf <- function(file_path, file_loc, mm_values) {
       data.frame(src_id = x$id, src_name = x$name, relations, stringsAsFactors = F)
   }
   relation_info <- ldply(xml_data$concepts, relation_func)[, -1]
-  
+
   # Convert MentalModeler influence to actual values
   na_values <- sum(is.na(mm_values)) == length(mm_values)
   relation_info$influence[relation_info$influence == "H+"] <- ifelse(na_values, 1, mm_values[1])
@@ -135,12 +135,14 @@ read.mmf <- function(file_path, file_loc, mm_values) {
   relation_info$influence <- as.numeric(relation_info$influence)
   # Create adjacency matrix using relationships from MentalModeler
   m <- matrix(0, nrow(concept_info), nrow(concept_info), dimnames = list(concept_info$id, concept_info$id))
-  src_id <- as.numeric(relation_info[, "src_id"]) + 1
-  id <- as.numeric(relation_info[, "id"]) + 1
+  # For some cases, id starts at 0. Adjust numbers accordingly.
+  src_id <- relation_info[, "src_id"]
+  id <- relation_info[, "id"]
   m[matrix(c(src_id, id), ncol=2)] <- as.numeric(relation_info$influence)
-  
   dimnames(m) <- list(rownames(concept_info),rownames(concept_info))
   mat$m <- m
+  
+  concept_info$id <- paste0("C",seq(1:nrow(concept_info)))
   mat$n <- concept_info
   res <- list(mat = mat, ss = list(m = data.frame(), n = data.frame()),
               sf = list(m = data.frame(), n = data.frame()),
